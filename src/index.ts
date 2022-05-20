@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
 import mikroConfig from "./mikro-orm.config";
@@ -7,6 +8,11 @@ import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import { createClient } from "redis";
+import { MyContext } from "./types";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig);
@@ -14,14 +20,43 @@ const main = async () => {
 
   const app = express();
 
+  const RedisStore = connectRedis(session);
+
+  const redisClient = createClient({ legacyMode: true });
+  redisClient.connect().catch(console.error);
+
+  app.use(
+    session({
+      name: "qid",
+      store: new RedisStore({
+        client: redisClient,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
+        httpOnly: true,
+        sameSite: "lax", //prevent CSRF attack
+        secure: __prod__, //cookie only works in https
+      },
+      saveUninitialized: false,
+      secret: "qowiueojwojfalksdjoqiwueo",
+      resave: false,
+    })
+  );
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: () => ({
-      em: orm.em,
-    }),
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    context: ({ req, res }): MyContext => {
+      return {
+        em: orm.em,
+        req,
+        res,
+      };
+    },
   });
 
   await apolloServer.start();
