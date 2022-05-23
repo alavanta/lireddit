@@ -4,10 +4,7 @@ mutation Register($username: String!, $password: String!){
     password: $password,
   }){
     user{
-      id
-      username,
-      updatedAt
-      createdAt
+      ...RegularUser
     }
     errors{
       field
