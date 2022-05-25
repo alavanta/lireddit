@@ -1,0 +1,9 @@
+me -> browse http:localhost:3000
+-> next.js server
+-> request graphql server http:localhost:4000
+-> next.js server building the html
+-> sending back to your browser
+
+next-js only do server side rendering(ssr) when the first page load, that's
+why when we do routing to another page and comeback to the first/initial page
+it will show the loading indicator
