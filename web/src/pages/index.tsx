@@ -2,13 +2,18 @@ import NavBar from "../components/NavBar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../generated/graphql";
+import Layout from "../components/Layout";
+import { Link } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 const Index = () => {
   const [{ data }] = usePostsQuery();
   return (
-    <>
-      <NavBar />
-      <div>hello isekai</div>
+    <Layout variant='small'>
+      <NextLink href='/create-post'>
+        <Link>create post</Link>
+      </NextLink>
+      <br />
       {!data ? (
         <div>loading...</div>
       ) : (
@@ -19,7 +24,7 @@ const Index = () => {
           </div>
         ))
       )}
-    </>
+    </Layout>
   );
 };
 
