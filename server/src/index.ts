@@ -9,12 +9,12 @@ import { UserResolver } from "./resolvers/user";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
-import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
 import { DataSource } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
+import path from "path";
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -23,11 +23,13 @@ export const dataSource = new DataSource({
   password: "postgres",
   logging: true,
   synchronize: true,
+  migrations: [path.join(__dirname, "./migrations/*")],
   entities: [Post, User],
 });
 
 const main = async () => {
   const conn = await dataSource.initialize();
+  conn.runMigrations();
 
   const app = express();
 
