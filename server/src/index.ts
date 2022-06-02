@@ -29,7 +29,7 @@ export const dataSource = new DataSource({
 
 const main = async () => {
   const conn = await dataSource.initialize();
-  conn.runMigrations();
+  // conn.runMigrations();
 
   const app = express();
 
