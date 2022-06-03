@@ -48,10 +48,13 @@ export class PostResolver {
     const qb = dataSource
       .getRepository(Post)
       .createQueryBuilder("p")
-      .orderBy('"createdAt"', "DESC")
+      .innerJoinAndSelect("p.creator", "u", "u.id = p.creatorId")
+      .orderBy("p.createdAt", "DESC")
       .take(realLimitPlusOne);
     if (cursor) {
-      qb.where('"createdAt" < :cursor', { cursor: new Date(parseInt(cursor)) });
+      qb.where("p.createdAt < :cursor", {
+        cursor: new Date(parseInt(cursor)),
+      });
     }
     const posts = await qb.getMany();
     return {
