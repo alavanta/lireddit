@@ -25,7 +25,7 @@ const Index = () => {
   if (!fetching && !data) {
     return <div>something went wrong</div>;
   }
-
+  const dataPosts = data?.posts.posts;
   return (
     <Layout variant='regular'>
       <Flex align='center'>
@@ -39,7 +39,7 @@ const Index = () => {
         <div>loading...</div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.map(({ title, textSnippet, id }) => (
+          {dataPosts?.map(({ title, textSnippet, id }) => (
             <Box key={id} p={5} shadow='md' borderWidth='1px'>
               <Heading fontSize='xl'>{title}</Heading>
               <Text mt={4}>{textSnippet}</Text>
@@ -47,13 +47,13 @@ const Index = () => {
           ))}
         </Stack>
       )}
-      {data && (
+      {data?.posts.hasMore && (
         <Flex>
           <Button
             onClick={() =>
               setVariables({
                 limit: variables.limit,
-                cursor: data.posts.at(-1)?.createdAt!,
+                cursor: dataPosts?.at(-1)?.createdAt!,
               })
             }
             isLoading={fetching}
