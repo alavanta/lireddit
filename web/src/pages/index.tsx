@@ -39,12 +39,15 @@ const Index = () => {
         <div>loading...</div>
       ) : (
         <Stack spacing={8}>
-          {dataPosts?.map(({ title, textSnippet, id }) => (
-            <Box key={id} p={5} shadow='md' borderWidth='1px'>
-              <Heading fontSize='xl'>{title}</Heading>
-              <Text mt={4}>{textSnippet}</Text>
-            </Box>
-          ))}
+          {dataPosts?.map(
+            ({ title, textSnippet, id, creator: { username } }) => (
+              <Box key={id} p={5} shadow='md' borderWidth='1px'>
+                <Heading fontSize='xl'>{title}</Heading>
+                <Text mt={4}>{textSnippet}</Text>
+                <Text my={8}>{username}</Text>
+              </Box>
+            )
+          )}
         </Stack>
       )}
       {data?.posts.hasMore && (
