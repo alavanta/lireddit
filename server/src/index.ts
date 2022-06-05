@@ -14,6 +14,7 @@ import cors from "cors";
 import { DataSource } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
+import { Updoot } from "./entities/updoot";
 import path from "path";
 
 export const dataSource = new DataSource({
@@ -24,7 +25,7 @@ export const dataSource = new DataSource({
   logging: true,
   synchronize: true,
   migrations: [path.join(__dirname, "./migrations/*")],
-  entities: [Post, User],
+  entities: [Post, User, Updoot],
 });
 
 const main = async () => {
