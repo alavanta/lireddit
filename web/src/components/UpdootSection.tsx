@@ -13,6 +13,9 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
   >("not-loading");
   const [, vote] = useVoteMutation();
   const handleVote = async (value: number) => {
+    if (value === post.voteStatus) {
+      return;
+    }
     setLoadingState(value === 1 ? "updoot-loading" : "downdoot-loading");
     await vote({
       value,
@@ -25,6 +28,7 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
       <IconButton
         onClick={() => handleVote(1)}
         aria-label='updoot post'
+        bgColor={post.voteStatus === 1 ? "green.500" : undefined}
         icon={<ChevronUpIcon />}
         isLoading={loadingState === "updoot-loading"}
       />
@@ -32,6 +36,7 @@ const UpdootSection: React.FC<UpdootSectionProps> = ({ post }) => {
       <IconButton
         onClick={() => handleVote(-1)}
         aria-label='downdoot post'
+        bgColor={post.voteStatus === -1 ? "red.500" : undefined}
         icon={<ChevronDownIcon />}
         isLoading={loadingState === "downdoot-loading"}
       />
