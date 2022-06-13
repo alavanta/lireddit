@@ -1,0 +1,7 @@
+ssr(server side rendering)
+    -> browser -> next.js -> graphql api
+    our next.js server will fetch the graphqlapi
+
+csr(client side rendering)
+    -> browser -> graphqlapi
+    our browser will directly call the graphqlapi

@@ -113,10 +113,15 @@ export class PostResolver {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
     const userId = req.session.userId;
-    const replacements: any[] = [realLimitPlusOne, userId];
+    const replacements: any[] = [realLimitPlusOne];
 
+    if (userId) {
+      replacements.push(userId);
+    }
+    let cursorIdx = 3;
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
+      cursorIdx = replacements.length;
     }
     console.log("userid", userId);
     const posts = await dataSource.query(
@@ -136,7 +141,7 @@ export class PostResolver {
     }
     from post p
     inner join public.user u on u.id = p."creatorId"
-    ${cursor ? `where p."createdAt" < $3` : ""}
+    ${cursor ? `where p."createdAt" < $${cursorIdx}` : ""}
     order by p."createdAt" DESC
     limit $1
     `,
