@@ -41,16 +41,25 @@ const Index = () => {
       ) : (
         <Stack spacing={8}>
           {dataPosts?.map((p) => (
-            <Box key={p.id} p={5} shadow='md' borderWidth='1px'>
-              <Flex>
-                <UpdootSection post={p} />
-                <Box>
-                  <Heading fontSize='xl'>{p.title}</Heading>
-                  <Text>posted by {p.creator.username}</Text>
-                  <Text mt={4}>{p.textSnippet}</Text>
-                </Box>
-              </Flex>
-            </Box>
+            <NextLink href='/post/[id]' as={`/post/${p.id}`}>
+              <Box
+                key={p.id}
+                p={5}
+                shadow='md'
+                borderWidth='1px'
+                cursor='pointer'
+                _hover={{ filter: "brightness(1.2)" }}
+              >
+                <Flex>
+                  <UpdootSection post={p} />
+                  <Box>
+                    <Heading fontSize='xl'>{p.title}</Heading>
+                    <Text>posted by {p.creator.username}</Text>
+                    <Text mt={4}>{p.textSnippet}</Text>
+                  </Box>
+                </Flex>
+              </Box>
+            </NextLink>
           ))}
         </Stack>
       )}
