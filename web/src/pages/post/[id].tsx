@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
@@ -37,7 +37,7 @@ const Post = ({}) => {
   }
   return (
     <Layout variant='small'>
-      <h2>{data?.post?.title}</h2>
+      <Heading mb={4}>{data?.post?.title}</Heading>
       <p>{data?.post?.text}</p>
     </Layout>
   );

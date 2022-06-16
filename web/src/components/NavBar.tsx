@@ -49,7 +49,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           <Heading>LiReddit</Heading>
         </Link>
       </NextLink>
-      <Box ml='auto'>{content}</Box>
+      <NextLink href='/create-post'>
+        <Button ml='auto' mr={4}>
+          create post
+        </Button>
+      </NextLink>
+      <Box>{content}</Box>
     </Flex>
   );
 };
